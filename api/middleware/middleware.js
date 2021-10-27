@@ -8,6 +8,16 @@ function logger(req, res, next) {
 
 function validateUserId(req, res, next) {
   // DO YOUR MAGIC
+  Users.getById(req.params.id)
+    .then(possibleId => {
+      if(possibleId) {
+        req.user = possibleId;
+        next();
+      } else {
+        next({status: 404,  message: "user not found" });
+      }
+    })
+    .catch(next);
 }
 
 function validateUser(req, res, next) {
