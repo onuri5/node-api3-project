@@ -26,7 +26,7 @@ function validateUser(req, res, next) {
   const { name } = req.body;
   if(
     name &&
-    name.trim().length > 3 &&
+    name.trim().length >= 3 &&
     typeof name === 'string' && 
     name.length < 20
   ) {
@@ -38,6 +38,17 @@ function validateUser(req, res, next) {
 
 function validatePost(req, res, next) {
   // DO YOUR MAGIC
+  const { text } = req.body;
+  if(
+    text &&
+    text.trim().length >= 3 &&
+    typeof text === 'string' && 
+    text.length < 1000
+  ) {
+    next();
+  } else {
+    next({status: 400, message: "missing required text field" });
+  }
 }
 
 function handleError(err, req, res, next) {
