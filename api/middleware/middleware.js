@@ -2,7 +2,8 @@ const Users = require('../users/users-model');
 
 function logger(req, res, next) {
   // DO YOUR MAGIG
-  console.log(req.method, req.url, Date.now());
+  const date = new Date();
+  console.log(req.method, req.url, date.toLocaleTimeString());
   next();
 }
 
@@ -22,6 +23,17 @@ function validateUserId(req, res, next) {
 
 function validateUser(req, res, next) {
   // DO YOUR MAGIC
+  const { name } = req.body;
+  if(
+    name &&
+    name.trim().length > 3 &&
+    typeof name === 'string' && 
+    name.length < 20
+  ) {
+    next();
+  } else {
+    next({status: 400, message: "missing required name field"});
+  }
 }
 
 function validatePost(req, res, next) {

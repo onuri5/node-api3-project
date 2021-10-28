@@ -30,15 +30,26 @@ router.get('/:id', validateUserId, (req, res) => {
   res.status(200).json(req.user);
 });
 
-router.post('/', (req, res) => {
+router.post('/', validateUser, (req, res, next) => {
   // RETURN THE NEWLY CREATED USER OBJECT
   // this needs a middleware to check that the request body is valid
-});
+    Users.insert(req.body)
+      .then(test => {
+        console.log(test)
+        res.status(201).json(test);
+      })
+      .catch(next);
+  })
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validateUser, validateUserId, (req, res, next) => {
   // RETURN THE FRESHLY UPDATED USER OBJECT
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
+  Users.update(req.params.id, req.body)
+    .then((updatedUser) => {
+      res.status(200).json(updatedUser)
+    })
+    .catch(next);
 });
 
 router.delete('/:id', (req, res) => {
